@@ -1,14 +1,43 @@
-
 import flet
-from flet import ElevatedButton, Page, Text, TextField, Image, DatePicker, TimePicker, FilePicker, FilePickerResultEvent, SnackBar, Row, Column, ScrollMode, icons, colors, app
+from flet import View, AppBar, ElevatedButton, Page, Text, TextField, Image, DatePicker, TimePicker, FilePicker, FilePickerResultEvent, SnackBar, Column, ScrollMode, colors, icons
 from datetime import datetime
 from pathlib import Path
 from kerykeion import AstrologicalSubject, KerykeionChartSVG, Report
 
 def main(page: Page):
+    page.title = "Zodiac"
+
+    def route_change(e):
+        page.views.clear()
+        page.views.append(
+            View(
+                "/",
+                [
+                    AppBar(title=Text("Ввод данных"), bgcolor=colors.SURFACE_VARIANT),
+                    input_column
+                ],
+                scroll=ScrollMode.ADAPTIVE
+            )
+        )
+        if page.route == "/result":
+            page.views.append(
+                View(
+                    "/result",
+                    [
+                        AppBar(title=Text("Результат"), bgcolor=colors.SURFACE_VARIANT),
+                        output_column
+                    ],
+                    scroll=ScrollMode.ADAPTIVE
+                )
+            )
+        page.update()
+
+    def view_pop(e):
+        page.views.pop()
+        top_view = page.views[-1]
+        page.go(top_view.route)
 
     def button_clicked(e):
-
         if (len(name_tf.value.strip()) == 0 or len(day_tf.value.strip()) == 0 or len(year_tf.value.strip()) == 0 or
                 len(hours_tf.value.strip()) == 0 or len(minutes_tf.value.strip()) == 0 or
                 len(place_tf.value.strip()) == 0):
@@ -43,7 +72,7 @@ def main(page: Page):
 
         image.src = chart.chartname
 
-        page.update()
+        page.go("/result")
 
     def change_date(e):
         day_tf.value = str(date_picker.value.day)
@@ -96,8 +125,8 @@ def main(page: Page):
         on_click=lambda _: file_picker.get_directory_path()
     )
     b = ElevatedButton(text="ПОКАЗАТЬ ГОРОСКОП", on_click=button_clicked)
-    t = Text(size=12, selectable=True)
-    image = Image(src=f"/icon.png", width=800, height=400)
+    t = Text(size=15, selectable=True)
+    image = Image(src="***", width=1000, height=600)
 
     date_picker = DatePicker(
         confirm_text="Подтвердить",
@@ -121,11 +150,14 @@ def main(page: Page):
     page.overlay.append(time_picker)
     page.overlay.append(file_picker)
 
-    input_column = Column([name_tf, day_tf, month_tf, year_tf, date_button, hours_tf, minutes_tf, time_button, place_tf, path_tf, path_button, b])
+    input_column = Column(
+        [name_tf, day_tf, month_tf, year_tf, date_button, hours_tf, minutes_tf, time_button, place_tf, path_tf,
+         path_button, b])
+    output_column = Column([image, t])
 
-    page.add(Row([input_column, t, image]))
-    page.scroll = ScrollMode.ADAPTIVE
-    page.title = "Zodiac"
-    page.update()
+    page.on_route_change = route_change
+    page.on_view_pop = view_pop
 
-app(target=main, assets_dir="assets")
+    page.go(page.route)
+
+flet.app(main)
