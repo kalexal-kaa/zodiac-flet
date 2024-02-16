@@ -7,36 +7,6 @@ from kerykeion import AstrologicalSubject, KerykeionChartSVG, Report
 def main(page: Page):
     page.title = "Zodiac"
 
-    def route_change(e):
-        page.views.clear()
-        page.views.append(
-            View(
-                "/",
-                [
-                    AppBar(title=Text("Ввод данных"), bgcolor=colors.GREEN_100),
-                    input_column
-                ],
-                scroll=ScrollMode.ADAPTIVE
-            )
-        )
-        if page.route == "/result":
-            page.views.append(
-                View(
-                    "/result",
-                    [
-                        AppBar(title=Text("Результат"), bgcolor=colors.BLUE_100),
-                        output_column
-                    ],
-                    scroll=ScrollMode.ADAPTIVE
-                )
-            )
-        page.update()
-
-    def view_pop(e):
-        page.views.pop()
-        top_view = page.views[-1]
-        page.go(top_view.route)
-
     def button_clicked(e):
         if (len(name_tf.value.strip()) == 0 or len(day_tf.value.strip()) == 0 or len(year_tf.value.strip()) == 0 or
                 len(hours_tf.value.strip()) == 0 or len(minutes_tf.value.strip()) == 0 or
@@ -101,6 +71,36 @@ def main(page: Page):
         except ValueError:
             return False
 
+    def route_change(e):
+        page.views.clear()
+        page.views.append(
+            View(
+                "/",
+                [
+                    AppBar(title=Text("Ввод данных"), bgcolor=colors.GREEN_100),
+                    input_column
+                ],
+                scroll=ScrollMode.ADAPTIVE
+            )
+        )
+        if page.route == "/result":
+            page.views.append(
+                View(
+                    "/result",
+                    [
+                        AppBar(title=Text("Результат"), bgcolor=colors.BLUE_100),
+                        output_column
+                    ],
+                    scroll=ScrollMode.ADAPTIVE
+                )
+            )
+        page.update()
+
+    def view_pop(e):
+        page.views.pop()
+        top_view = page.views[-1]
+        page.go(top_view.route)
+
     name_tf = TextField(label="Имя", autofocus=True)
     day_tf = TextField(label="День рождения")
     month_tf = TextField(label="Месяц рождения")
@@ -128,6 +128,11 @@ def main(page: Page):
     t = Text(size=15, selectable=True)
     image = Image(src="***", width=1000, height=600)
 
+    input_column = Column(
+        [name_tf, day_tf, month_tf, year_tf, date_button, hours_tf, minutes_tf, time_button, place_tf, path_tf,
+         path_button, b])
+    output_column = Column([image, t])
+
     date_picker = DatePicker(
         confirm_text="Подтвердить",
         cancel_text="Отмена",
@@ -149,11 +154,6 @@ def main(page: Page):
     page.overlay.append(date_picker)
     page.overlay.append(time_picker)
     page.overlay.append(file_picker)
-
-    input_column = Column(
-        [name_tf, day_tf, month_tf, year_tf, date_button, hours_tf, minutes_tf, time_button, place_tf, path_tf,
-         path_button, b])
-    output_column = Column([image, t])
 
     page.on_route_change = route_change
     page.on_view_pop = view_pop
