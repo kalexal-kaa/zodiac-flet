@@ -60,6 +60,18 @@ def main(page: Page):
         path_tf.value = e.path
         page.update()
 
+    def show_snack_bar(msg):
+        snack_bar = SnackBar(content=Text(msg), bgcolor=colors.RED)
+        page.snack_bar = snack_bar
+        snack_bar.open = True
+
+    def is_valid_date_time(day, month, year, hours, minutes):
+        try:
+            datetime(year, month, day, hours, minutes)
+            return True
+        except ValueError:
+            return False
+
     name_tf = TextField(label="Имя", autofocus=True)
     day_tf = TextField(label="День рождения")
     month_tf = TextField(label="Месяц рождения")
@@ -85,7 +97,7 @@ def main(page: Page):
     )
     b = ElevatedButton(text="ПОКАЗАТЬ ГОРОСКОП", on_click=button_clicked)
     t = Text(size=12, selectable=True)
-    image = Image(src="***", width=800, height=400)
+    image = Image(src=f"/icon.png", width=800, height=400)
 
     date_picker = DatePicker(
         confirm_text="Подтвердить",
@@ -116,16 +128,4 @@ def main(page: Page):
     page.title = "Zodiac"
     page.update()
 
-    def show_snack_bar(msg):
-        snack_bar = SnackBar(content=Text(msg), bgcolor=colors.RED)
-        page.snack_bar = snack_bar
-        snack_bar.open = True
-
-    def is_valid_date_time(day, month, year, hours, minutes):
-        try:
-            datetime(year, month, day, hours, minutes)
-            return True
-        except ValueError:
-            return False
-
-app(target=main)
+app(target=main, assets_dir="assets")
