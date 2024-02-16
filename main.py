@@ -1,5 +1,5 @@
 import flet
-from flet import View, AppBar, ElevatedButton, Page, Text, TextField, Image, DatePicker, TimePicker, FilePicker, FilePickerResultEvent, SnackBar, Column, ScrollMode, colors, icons
+from flet import View, AppBar, ElevatedButton, Page, Text, TextField, Image, DatePicker, TimePicker, FilePicker, FilePickerResultEvent, SnackBar, Column, ScrollMode, colors, icons, app
 from datetime import datetime
 from pathlib import Path
 from kerykeion import AstrologicalSubject, KerykeionChartSVG, Report
@@ -13,7 +13,7 @@ def main(page: Page):
             View(
                 "/",
                 [
-                    AppBar(title=Text("Ввод данных"), bgcolor=colors.SURFACE_VARIANT),
+                    AppBar(title=Text("Ввод данных"), bgcolor=colors.GREEN_100),
                     input_column
                 ],
                 scroll=ScrollMode.ADAPTIVE
@@ -24,7 +24,7 @@ def main(page: Page):
                 View(
                     "/result",
                     [
-                        AppBar(title=Text("Результат"), bgcolor=colors.SURFACE_VARIANT),
+                        AppBar(title=Text("Результат"), bgcolor=colors.BLUE_100),
                         output_column
                     ],
                     scroll=ScrollMode.ADAPTIVE
@@ -160,4 +160,4 @@ def main(page: Page):
 
     page.go(page.route)
 
-flet.app(main)
+app(main)
