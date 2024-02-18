@@ -1,4 +1,3 @@
-import flet
 from flet import View, AppBar, ElevatedButton, Page, Text, TextField, Image, DatePicker, TimePicker, FilePicker, FilePickerResultEvent, SnackBar, Column, ScrollMode, colors, icons, app
 from datetime import datetime
 from pathlib import Path
@@ -119,7 +118,7 @@ def main(page: Page):
     )
     hours_tf = TextField(label="Время рождения(часы)")
     minutes_tf = TextField(label="Время рождения(минуты)")
-    time_button = flet.ElevatedButton(
+    time_button = ElevatedButton(
         "Выбор времени рождения",
         icon=icons.LOCK_CLOCK,
         on_click=lambda _: time_picker.pick_time(),
