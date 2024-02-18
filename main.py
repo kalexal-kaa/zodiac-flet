@@ -28,11 +28,18 @@ def main(page: Page):
             page.update()
             return
 
+        path = Path(path_tf.value)
+
+        if not path.exists():
+            show_snack_bar("Путь до места сохранения файла не существует")
+            page.update()
+            return
+
         subject = AstrologicalSubject(name, year, month, day, hours, minutes, place)
         chart = KerykeionChartSVG(subject, chart_type="Natal")
 
         if not len(path_tf.value.strip()) == 0:
-            chart.set_output_directory(Path(path_tf.value))
+            chart.set_output_directory(path)
 
         chart.makeSVG()
 
